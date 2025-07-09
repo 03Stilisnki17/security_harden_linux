@@ -316,25 +316,6 @@ secure_boot() {
     log "Boot settings secured"
 }
 
-# Function to configure IPv6
-configure_ipv6() {
-    local disable_ipv6
-    read -p "Do you want to disable IPv6? (y/N): " disable_ipv6
-    case $disable_ipv6 in
-        [Yy]* )
-            log "Disabling IPv6..."
-            echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf || handle_error "Failed to disable IPv6 (all)"
-            echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf || handle_error "Failed to disable IPv6 (default)"
-            echo "net.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf || handle_error "Failed to disable IPv6 (lo)"
-            sudo sysctl -p || handle_error "Failed to apply sysctl changes"
-            log "IPv6 has been disabled"
-            ;;
-        * )
-            log "IPv6 will remain enabled"
-            ;;
-    esac
-}
-
 # Function to setup AppArmor
 setup_apparmor() {
     log "Setting up AppArmor..."
